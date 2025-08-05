@@ -4,8 +4,8 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
@@ -130,7 +130,7 @@ public class BedrockFinderClient implements ClientModInitializer {
     }
   }
 
-  private void finishSearch(MinecraftClient client, List<String> coordinates) {
+  private void finishSearch(MinecraftClient client, Collection<String> coordinates) {
     if (coordinates.isEmpty()) {
       if (client.player != null) {
         client.execute(() -> client.player.sendMessage(Text.literal("§c未找到任何基岩。"), false));
