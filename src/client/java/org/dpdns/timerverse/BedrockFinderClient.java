@@ -104,15 +104,16 @@ public class BedrockFinderClient implements ClientModInitializer {
         // 如果在一个搜索半径内一个基岩都没找到，并且半径已经很大，则可能区域内没有更多基岩，提前中止
         if (!foundInRadius && searchRadius > 10) {
           if (client.player != null) {
+            // 创建一个 final 变量来捕获 searchRadius 的当前值
+            final int finalSearchRadius = searchRadius;
             client.execute(
                 () ->
                     client.player.sendMessage(
-                        Text.literal("§e在半径 " + (searchRadius * 16) + " 的范围内未找到更多基岩，已停止搜索。"),
+                        Text.literal("§e在半径 " + (finalSearchRadius * 16) + " 的范围内未找到更多基岩，已停止搜索。"),
                         false));
           }
           break;
         }
-        searchRadius++;
       }
 
       // 完成搜索
