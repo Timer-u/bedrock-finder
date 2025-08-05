@@ -4,8 +4,9 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -55,7 +56,8 @@ public class BedrockFinderClient implements ClientModInitializer {
       return; // 如果玩家或世界不存在则返回
     }
 
-    List<String> coordinates = new ArrayList<>();
+    Set<String> coordinates = new HashSet<>(); // 使用 HashSet 自动去重
+
     BlockPos playerPos = client.player.getBlockPos();
     int searchRadius = 0;
 
@@ -85,7 +87,7 @@ public class BedrockFinderClient implements ClientModInitializer {
                           y,
                           currentChunkPos.getStartZ() + chunkBlockZ);
                   if (chunk.getBlockState(blockPos).getBlock() == Blocks.BEDROCK) {
-                    coordinates.add(
+                    coordinates.add( // .add() 方法会自动处理重复
                         String.format(
                             "%d %d %d Bedrock", blockPos.getX(), blockPos.getY(), blockPos.getZ()));
                     if (coordinates.size() >= targetCount) {
@@ -104,7 +106,6 @@ public class BedrockFinderClient implements ClientModInitializer {
         // 如果在一个搜索半径内一个基岩都没找到，并且半径已经很大，则可能区域内没有更多基岩，提前中止
         if (!foundInRadius && searchRadius > 10) {
           if (client.player != null) {
-            // 创建一个 final 变量来捕获 searchRadius 的当前值
             final int finalSearchRadius = searchRadius;
             client.execute(
                 () ->
@@ -114,6 +115,7 @@ public class BedrockFinderClient implements ClientModInitializer {
           }
           break;
         }
+        searchRadius++;
       }
 
       // 完成搜索
