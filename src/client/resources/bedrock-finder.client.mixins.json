@@ -1,0 +1,9 @@
+{
+  "required": true,
+  "package": "org.dpdns.timerverse.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
